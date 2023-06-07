@@ -17,8 +17,7 @@ class Linked_list;
  */
 template <class T>
 class Nodo_lista {
-    friend class Linked_list<
-        T>;  // In questo modo Linked_list può accedere alla parte privata di Nodo_lista
+    friend class Linked_list<T>;  // In questo modo Linked_list può accedere alla parte privata di Nodo_lista
 
    public:
     typedef T tipoelem;  // Tipo generico degli elementi memorizzati nel nodo
@@ -283,7 +282,6 @@ bool Linked_list<T>::operator==(const Linked_list<T>& L) {
     }
     return true;
 }
-
 //Inserisce in prima posizione
 template <class T>
 void Linked_list<T>::inserisciTesta(const tipoelem& e) {
