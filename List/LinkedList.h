@@ -29,10 +29,10 @@ class Nodo_lista {
 };
 
 template <class T>
-class Linked_list : public Linear_List<T, Nodo_lista<T>*> {
+class Linked_list : public LinearList<T, Nodo_lista<T>*> {
    public:
-    typedef typename Linear_List<T, Nodo_lista<T>*>::tipoelem tipoelem;
-    typedef typename Linear_List<T, Nodo_lista<T>*>::posizione posizione;
+    typedef typename LinearList<T, Nodo_lista<T>*>::tipoelem tipoelem;
+    typedef typename LinearList<T, Nodo_lista<T>*>::posizione posizione;
 
     // costruttore base
     Linked_list();
