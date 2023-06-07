@@ -16,7 +16,7 @@ using namespace std;
  * @tparam P Il tipo generico utilizzato per la posizione nella lista.
  */
 template <class T, class P>
-class Linear_List {
+class LinearList {
 
 public:
     typedef T tipoelem;     /**< Tipo generico della lista */
@@ -83,7 +83,7 @@ public:
      * @brief Operatore di output per la classe Linear_List.
      */
     template <class T1, class P1>
-    friend ostream& operator<<(ostream& , const Linear_List<T1,P1>&);
+    friend ostream& operator<<(ostream& , const LinearList<T1,P1>&);
     /**
      * @brief Inserisce un nuovo elemento all'inizio della lista.
      * @param elem L'elemento da inserire.
@@ -174,8 +174,8 @@ private:
  * @return L'oggetto ostream aggiornato dopo la stampa degli elementi.
  */
 template< class T, class P >
-ostream& operator<<(ostream& os, const Linear_List<T,P> &l){
-    typename Linear_List<T,P>::posizione p;
+ostream& operator<<(ostream& os, const LinearList<T,P> &l){
+    typename LinearList<T,P>::posizione p;
     p = l.primoLista();
     os << "[";
     while (!l.fineLista(p)){
@@ -201,7 +201,7 @@ ostream& operator<<(ostream& os, const Linear_List<T,P> &l){
  * @tparam P Il tipo generico utilizzato per la posizione nella lista.
  */
 template <class T, class P>
-void Linear_List<T, P>::inverti() {
+void LinearList<T, P>::inverti() {
     posizione prima=primoLista();
     posizione ultimo=ultimoLista();
     tipoelem e1,e2;
@@ -230,7 +230,7 @@ void Linear_List<T, P>::inverti() {
  * @return `true` se la lista è palindroma, `false` altrimenti.
  */
 template <class T,class P>
-bool Linear_List<T, P>::palindroma() {
+bool LinearList<T, P>::palindroma() {
     posizione prima=primoLista();
     posizione ultimo=ultimoLista();
     for (int i=0;i<(lunghezza()/2);i++)
@@ -258,7 +258,7 @@ bool Linear_List<T, P>::palindroma() {
  * @return `true` se l'elemento viene trovato, `false` altrimenti.
  */
 template <class T,class P>
-bool Linear_List<T,P>::ricercaElemento(T& e) const {
+bool LinearList<T,P>::ricercaElemento(T& e) const {
     posizione p=this->primoLista();
     while (!fineLista(p))
     {
@@ -293,7 +293,7 @@ bool Linear_List<T,P>::ricercaElemento(T& e) const {
  * @tparam P Il tipo generico utilizzato per la posizione nella lista.
  */
 template <class T,class P>
-void Linear_List<T,P>::bubbleSort() {
+void LinearList<T,P>::bubbleSort() {
     posizione p, q;
     int lung = lunghezza();
     for (int i = 0; i < lung - 1; i++) {
@@ -331,7 +331,7 @@ void Linear_List<T,P>::bubbleSort() {
  * @tparam P Il tipo generico utilizzato per la posizione nella lista.
  */
 template <class T, class P>
-void Linear_List<T,P>::quicksort(){
+void LinearList<T,P>::quicksort(){
     posizione inizio = primoLista();
     posizione fine = ultimoLista();
     runQuickSort(inizio, fine);
@@ -352,7 +352,7 @@ void Linear_List<T,P>::quicksort(){
  * @return posizione finale del pivot dopo la partizione
  */
 template <class T, class P>
-typename Linear_List<T,P>::posizione Linear_List<T,P>::partition(posizione inizio, posizione fine){
+typename LinearList<T,P>::posizione LinearList<T,P>::partition(posizione inizio, posizione fine){
     tipoelem pivot = leggiLista(fine);  // Scelgo l'elemento pivot come l'ultimo elemento della lista
     posizione i = inizio;               // posizione corrente in cui inserire il prossimo elemento minore del pivot
 
@@ -380,7 +380,7 @@ typename Linear_List<T,P>::posizione Linear_List<T,P>::partition(posizione inizi
  * @param fine posizione finale del sottoarray da ordinare
  */
 template <class T, class P>
-void Linear_List<T,P>::runQuickSort(posizione inizio, posizione fine){
+void LinearList<T,P>::runQuickSort(posizione inizio, posizione fine){
     // se inizio==fine allora la sublist è composta al massimo da un elemento
     // o già completamente ordinata, quindi non è necessario eseguire altro.
     if (inizio != fine) {
