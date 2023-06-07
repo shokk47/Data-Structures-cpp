@@ -10,19 +10,19 @@ class OrderedList {
    public:
     typedef typename VectorList<T>::tipoelem tipoelem;
     typedef typename VectorList<T>::posizione posizione;
-    //METODI
-    void insList(const tipoelem&);         // inserisce un elemento
-    void cancLista(const tipoelem&);       // rimuove un elemento
-    bool ricerca(const tipoelem&);         // cerca un elemento
-    void fusione(const OrderedList<T>&);  // fonde con una lista ordinata
+
+    void insList(const tipoelem&);         // Inserisce un elemento
+    void cancLista(const tipoelem&);       // Rimuove un elemento
+    bool ricerca(const tipoelem&);         // Cerca un elemento
+    void fusione(const OrderedList<T>&);   // Fonde con una lista ordinata
     bool sottoLista(
         const OrderedList<T>& S1,
-        const OrderedList<T>& S2);  //restituisce TRUE se S2 è sottolista di S1, FALSE altrimenti
+        const OrderedList<T>& S2);          // Restituisce TRUE se S2 è sottolista di S1, FALSE altrimenti
     void differenza(
         OrderedList<T>& S1,
-        const OrderedList<T>& S2);  //CANCELLA DA S1 TUTTI GLI ELEMENTI DI S2
+        const OrderedList<T>& S2);          // Cancella da S1 tutti gli elementi di S2
 
-    //FUNZIONI DI LISTA
+    // FUNZIONI CLASSICHE DI VECTORLIST
     tipoelem leggiLista(posizione) const;
     posizione primoLista() const;
     posizione ultimoLista() const;
