@@ -84,22 +84,6 @@ public:
      */
     template <class T1, class P1>
     friend ostream& operator<<(ostream& , const Linear_List<T1,P1>&);
-    // sovraccarico di operatori utili
-    /**
-     * @brief Operatore di accesso agli elementi della lista.
-     * @param pos La posizione dell'elemento da restituire.
-     * @return L'elemento nella posizione specificata.
-     */
-    //virtual T& operator[](posizione p);
-    /**
-     * @brief Operatore di incremento postfisso per la posizione nella lista.
-     * @param pos La posizione da incrementare.
-     * @return La posizione precedente all'incremento.
-     */
-    //virtual posizione operator++(posizione& p);
-
-    // Funzioni accessorie sempre valide (a prescindere dalla realizzazione della lista)
-
     /**
      * @brief Inserisce un nuovo elemento all'inizio della lista.
      * @param elem L'elemento da inserire.
@@ -228,8 +212,7 @@ void Linear_List<T, P>::inverti() {
         scriviLista(e2,prima);
         scriviLista(e1,ultimo);
         prima=succLista(prima);
-        ultimo= precLista(ultimo);
-
+        ultimo=precLista(ultimo);
     }
 }
 /**
@@ -370,19 +353,20 @@ void Linear_List<T,P>::quicksort(){
  */
 template <class T, class P>
 typename Linear_List<T,P>::posizione Linear_List<T,P>::partition(posizione inizio, posizione fine){
-    tipoelem pivot = leggiLista(fine);
-    posizione i = precLista(inizio);
+    tipoelem pivot = leggiLista(fine);  // Scelgo l'elemento pivot come l'ultimo elemento della lista
+    posizione i = inizio;               // posizione corrente in cui inserire il prossimo elemento minore del pivot
 
     for (posizione j = inizio; j != fine; j = succLista(j)) {
         if (leggiLista(j) <= pivot) {
-            i = succLista(i);
+            // Se l'elemento corrente è <= al pivot, lo scambio con l'elemento all'indice i
+            // in modo da spostare l'elemento minore del pivot a sinistra
             scambiaElementi(i, j);
+            i = succLista(i);
         }
     }
 
-    posizione pivotPos = succLista(i);
-    scambiaElementi(pivotPos, fine);
-    return pivotPos;
+    scambiaElementi(i, fine);       // inserisco il pivot dopo l'ultimo elemento minore trovato
+    return i;                       // i è l'indice del pivot dopo la partizione
 }
 /**
  * @brief Funzione ricorsiva utilizzata per eseguire l'algoritmo Quick Sort sulla lista.
@@ -397,10 +381,21 @@ typename Linear_List<T,P>::posizione Linear_List<T,P>::partition(posizione inizi
  */
 template <class T, class P>
 void Linear_List<T,P>::runQuickSort(posizione inizio, posizione fine){
-    if (inizio < fine) {
-        posizione pivot = partition(inizio, fine);
-        runQuickSort(inizio, precLista(pivot));
-        runQuickSort(succLista(pivot), fine);
+    // se inizio==fine allora la sublist è composta al massimo da un elemento
+    // o già completamente ordinata, quindi non è necessario eseguire altro.
+    if (inizio != fine) {
+        // Altrimenti si procede con la partizione della sotto-lista utilizzando un pivot
+        posizione p = partition(inizio, fine); // p = pos del pivot
+        if (inizio != p)
+            // Vuol dire che ci sono elementi a sinistra del pivot che devono essere
+            // ordinati. In questo modo, verrà eseguito il quick sort sulla
+            // sotto-lista a sinistra del pivot.
+            runQuickSort(inizio, precLista(p));
+        if (fine != p)
+            // Vuol dire che ci sono elementi a destra del pivot che devono essere
+            // ordinati. In questo modo, verrà eseguito il quick sort sulla
+            // sotto-lista a destra del pivot.
+            runQuickSort(succLista(p), fine);
     }
 }
 
