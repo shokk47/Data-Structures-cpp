@@ -36,7 +36,6 @@ public:
     ~QueueVector();
 
     // Metodi di servizio:
-    void create();                  // creaCoda()
     bool isEmpty() const;           // codaVuota()
     typeElem peek() const;          // leggiCoda();
     void dequeue();                 // fuoriCoda()
@@ -70,7 +69,8 @@ private:
 template<class T>
 QueueVector<T>::QueueVector() {
     maxLength = 10;
-    create();
+    elements = new typeElem[maxLength];
+    headIndex = tailIndex = 0;
 }
 /**
  * @brief Costruttore che crea una coda vuota di n elementi.
@@ -80,7 +80,8 @@ QueueVector<T>::QueueVector() {
 template<class T>
 QueueVector<T>::QueueVector(int n) {
     maxLength = n;
-    create();
+    elements = new typeElem[maxLength];
+    headIndex = tailIndex = 0;
 }
 /**
  * @brief Costruttore di copia.
@@ -93,8 +94,8 @@ QueueVector<T>::QueueVector(const QueueVector<T> &q) {
     headIndex = q.headIndex;
     tailIndex = q.tailIndex;
     elements = new typeElem[maxLength];
-    for (int i = headIndex; i < q.tailIndex; i++) {
-        elements[(headIndex+i)%maxLength] = q.elements[(headIndex+i)%maxLength];
+    for (int i = headIndex; i != (headIndex+tailIndex)%maxLength; i++) {
+        elements[i] = q.elements[i];
     }
 }
 /**
@@ -104,15 +105,6 @@ QueueVector<T>::QueueVector(const QueueVector<T> &q) {
 template<class T>
 QueueVector<T>::~QueueVector() {
     delete[] elements;
-}
-/**
- * @brief Crea una coda vuota.
- * @tparam T tipo di dato.
- */
-template<class T>
-void QueueVector<T>::create() {
-    elements = new typeElem[maxLength];
-    headIndex = tailIndex = 0;
 }
 /**
  * @brief Restituisce true se la coda è vuota, false altrimenti.
@@ -139,7 +131,7 @@ template<class T>
 void QueueVector<T>::dequeue() {
     if (!isEmpty()) {
         headIndex = (headIndex+1)%maxLength;
-        tailIndex = (tailIndex -1+maxLength)%maxLength;
+        tailIndex--;
     } else throw std::out_of_range("Empty queue");
 }
 /**
@@ -166,11 +158,11 @@ QueueVector<T> &QueueVector<T>::operator=(const QueueVector<T> &q) {
     if (this != &q) {
         this->~QueueVector();
         maxLength = q.maxLength;
-        headIndex = q.head;
-        tailIndex = q.length;
+        headIndex = q.headIndex;
+        tailIndex = q.tailIndex;
         elements = new typeElem[maxLength];
-        for (int i = headIndex; i < q.length; i++) {
-            elements[(headIndex+i)%maxLength] = q.elements[(headIndex+i)%maxLength];
+        for (int i = headIndex; i != (headIndex+tailIndex)%maxLength; i++) {
+            elements[i] = q.elements[i];
         }
     }
     return *this;
@@ -212,11 +204,15 @@ bool QueueVector<T>::operator!=(const QueueVector<T> &q) const {
 template<class T>
 std::ostream& operator<<(std::ostream& os, const QueueVector<T>& q) {
     os << "[";
-    for (int i = q.headIndex; i < q.tailIndex; i++) {
-        os << q.elements[(q.headIndex+i)%q.maxLength];
-        if (i != q.tailIndex-1) os << ",";
+    if (q.tailIndex > 0) {
+        os << q.elements[q.headIndex % q.maxLength];
+        for (int i = (q.headIndex + 1) % q.maxLength;
+             i != (q.headIndex + q.tailIndex) % q.maxLength;
+             i = (i + 1) % q.maxLength) {
+            os << "," << q.elements[i];
+        }
     }
-    os << "]";
+    os << "]" << endl;
     return os;
 }
 /**
@@ -239,7 +235,8 @@ bool QueueVector<T>::exists(const typeElem &el) const {
 template <class T>
 void QueueVector<T>::clear() {
     delete[] elements;
-    create();
+    elements = new typeElem[maxLength];
+    headIndex = tailIndex = 0;
 }
 /**
  * @brief Cambia la dimensione dell'array.

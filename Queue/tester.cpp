@@ -161,24 +161,5 @@ int main() {
     cout << "RUN TESTS PTR\n";
     runTestsPtr();
     cout << "RUN TESTS VECTOR\n";
-    /*runTestsVector();
-
-
-    QueueVector<int> queue;
-    queue.enqueue(31);
-    queue.enqueue(42);
-    queue.enqueue(13);
-    queue.enqueue(44);
-    queue.enqueue(35);
-    cout << queue << endl;
-    queue.dequeue();
-    cout << queue << endl;
-    QueueVector<int> queue2 = queue;
-    cout << queue2 << endl;
-    if (queue2 == queue) {
-        std::cout << "Test Passed: operator=() - Queue assignment is correct\n";
-    } else {
-        std::cout << "Test Failed: operator=() - Queue assignment is incorrect\n";
-    }
-     */
+    runTestsVector();
 }
