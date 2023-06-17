@@ -156,7 +156,6 @@ void runTestsVector() {
     }
 }
 
-
 int main() {
     cout << "RUN TESTS PTR\n";
     runTestsPtr();

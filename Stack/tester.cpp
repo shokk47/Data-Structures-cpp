@@ -130,17 +130,4 @@ int main() {
     runTestsPtr();
     cout << "RUN TESTS VECTOR\n";
     runTestsVector();
-
-    cout << endl << "PRINT TEST" << endl;
-    StackVector<int> stack;
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-    cout << "StackVector: " << stack << endl;
-
-    StackPtr<int> stack2;
-    stack2.push(1);
-    stack2.push(2);
-    stack2.push(3);
-    cout << "StackPtr: " << stack2 << endl;
 }
