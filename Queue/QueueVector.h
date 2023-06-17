@@ -5,20 +5,23 @@
 #include <stdexcept>
 
 /**
+ *  @brief Classe che rappresenta una coda implementata con un vettore.
+ *  <p><br>
  *  Realizzazione di una coda con vettore.
- *  queue: Head:[1]-[2]-[3]-[4]-[5]:Tail
- *  <p>
+ *  queue: Head -> [1,2,3,4,5] <- Tail
+ *  <p><br>
  *  Una coda è un tipo di astratto che consente di rappresentare una sequenza
  *  di elementi con accesso agli estremi:
  *  <ul>
  *  <li> è possibile aggiungere elementi in fondo alla coda (tail). </li>
- *  <li> è possibile eliminare elementi dalla testa (head). </li>
+ *  <li> è possibile leggere l'elemento in testa alla coda (head). </li>
+ *  <li> è possibile eliminare l'elemento in testa alla coda (head). </li>
  *  </ul>
- *  <p>
+ *  <p><br>
  *  Detta anche Queue, è un insieme dinamico in cui l'elemento rimosso dall'operazione
  *  di cancellazione è predeterminato, cioè quello che per più tempo è rimasto
  *  nell'insieme (<b>FIFO</b>, first in, first out).
- *  <p>
+ *  <p><br>
  *  E' particolarmente adatta a rappresentare sequenze nelle quali l'elemento viene elaborato
  *  secondo l'ordine di arrivo.
  */
@@ -28,199 +31,218 @@ class QueueVector {
 public:
     typedef T typeElem;
     QueueVector();
-    ~QueueVector() {clear();}
+    QueueVector(int);
     QueueVector(const QueueVector<T>&);
-    bool isEmpty() const;
-    typeElem peek() const;
-    void dequeue();
-    void enqueue(const typeElem&);
-    void clear();
+    ~QueueVector();
 
-    // Funzioni aggiuntive:
-    int getLength() const;
-    bool exists(const typeElem&) const;
+    // Metodi di servizio:
+    void create();                  // creaCoda()
+    bool isEmpty() const;           // codaVuota()
+    typeElem peek() const;          // leggiCoda();
+    void dequeue();                 // fuoriCoda()
+    void enqueue(const typeElem&);  // inCoda()
+
+    // Overload operatori:
     QueueVector<T>& operator=(const QueueVector<T>&);
     bool operator==(const QueueVector<T>&) const;
+    bool operator!=(const QueueVector<T>&) const;
 
     template<class T1>
     friend std::ostream &operator<<(std::ostream&, const QueueVector<T1>&);
 
+    // Metodi aggiuntivi:
+    int getLength() const {return tailIndex;}
+    bool exists(const typeElem&) const;
+    void clear();
+
 private:
-    int head;           // indice della testa
-    int tail;           // indice della coda
-    int length;         // dimensione totale dell'array, compresi gli spazi vuoti
+    int headIndex;      // indice della testa
+    int tailIndex;      // dimensione effettiva utilizzata
+    int maxLength;      // dimensione massima dell'array
     typeElem *elements; // array in cui memorizzare gli elementi
     void changeDimension(typeElem *&, int, int);
 };
 
 /**
- * Costruttore di default che crea
- * una coda vuota di 10 elementi.
- * <p>
- * Costruisce una coda vuota.
+ * @brief Costruttore di default che crea una coda vuota di 10 elementi.
+ * @tparam T tipo di dato.
  */
 template<class T>
 QueueVector<T>::QueueVector() {
-    length = 10;
-    elements = new typeElem[length];
-    head = tail = 0;
-    length = 10;
+    maxLength = 10;
+    create();
 }
 /**
- * Costruttore di copia.
- * <p>
- * Costruisce una coda che è la copia di quella passata come parametro.
- *
+ * @brief Costruttore che crea una coda vuota di n elementi.
+ * @tparam T tipo di dato.
+ * @param n numero di elementi.
+ */
+template<class T>
+QueueVector<T>::QueueVector(int n) {
+    maxLength = n;
+    create();
+}
+/**
+ * @brief Costruttore di copia.
+ * @tparam T tipo di dato.
  * @param q la coda da copiare.
  */
 template<class T>
 QueueVector<T>::QueueVector(const QueueVector<T> &q) {
-    length = q.length;
-    head = q.headh;
-    tail = q.tail;
-    elements = new typeElem[length];
-    for (int i = head; i < tail; i++) {
-        elements[(head+i)%length] = q.elements[(head+i)%length];
+    maxLength = q.maxLength;
+    headIndex = q.headIndex;
+    tailIndex = q.tailIndex;
+    elements = new typeElem[maxLength];
+    for (int i = headIndex; i < q.tailIndex; i++) {
+        elements[(headIndex+i)%maxLength] = q.elements[(headIndex+i)%maxLength];
     }
 }
 /**
- * (codaVuota)
- * Controlla se la coda è vuota.
- * <p>
- * @return true se la coda è vuota, false altrimenti.
+ * @brief Distruttore.
+ * @tparam T tipo di dato.
+ */
+template<class T>
+QueueVector<T>::~QueueVector() {
+    delete[] elements;
+}
+/**
+ * @brief Crea una coda vuota.
+ * @tparam T tipo di dato.
+ */
+template<class T>
+void QueueVector<T>::create() {
+    elements = new typeElem[maxLength];
+    headIndex = tailIndex = 0;
+}
+/**
+ * @brief Restituisce true se la coda è vuota, false altrimenti.
+ * @tparam T tipo di dato.
  */
 template<class T>
 bool QueueVector<T>::isEmpty() const {
-    return tail <= 0;
+    return tailIndex == 0;
 }
 /**
- * (leggiCoda)
- * Restituisce il valore dell'elemento in testa alla coda.
- * <p>
- * @return il valore dell'elemento in testa alla coda.
- * @throw std::out_of_range se la coda è vuota.
+ * @brief Restituisce l'elemento in testa alla coda senza rimuoverlo.
+ * @tparam T tipo di dato.
  */
 template<class T>
 typename QueueVector<T>::typeElem QueueVector<T>::peek() const {
-    if (!isEmpty()) return elements[head];
+    if (!isEmpty()) return elements[headIndex];
     else throw std::out_of_range("Empty queue");
 }
 /**
- * (fuoriCoda)
- * Elimina l'elemento in testa alla coda.
- * <p>
- * @throw std::out_of_range se la coda è vuota.
+ * @brief Rimuove l'elemento in testa alla coda.
+ * @tparam T tipo di dato.
  */
 template<class T>
 void QueueVector<T>::dequeue() {
     if (!isEmpty()) {
-        head = (head+1)%length;
-        tail--;
+        headIndex = (headIndex+1)%maxLength;
+        tailIndex = (tailIndex -1+maxLength)%maxLength;
     } else throw std::out_of_range("Empty queue");
 }
 /**
- * (inCoda)
- * Inserisce un elemento in fondo alla coda.
- * <p>
- * @param el l'elemento da inserire.
+ * @brief Aggiunge un elemento in fondo alla coda.
+ * @tparam T tipo di dato.
  */
 template<class T>
 void QueueVector<T>::enqueue(const typeElem &el) {
-    if (tail == length) {
-        changeDimension(elements, length, length*2);
-        length *= 2;
+    if (tailIndex == maxLength) {
+        changeDimension(elements, maxLength, maxLength*2);
+        maxLength *= 2;
     }
-    elements[(head+tail)%length] = el;
-    tail++;
+    elements[(headIndex+tailIndex)%maxLength] = el;
+    tailIndex++;
 }
 /**
- * (svuotaCoda)
- * Svuota la coda.
- */
-template<class T>
-void QueueVector<T>::clear() {
-    head = tail = 0;
-}
-/**
- * (lunghezza)
- * Restituisce la lunghezza della coda.
- * <p>
- * @return la lunghezza della coda.
- */
-template<class T>
-int QueueVector<T>::getLength() const {
-    return tail;
-}
-/**
- * (esiste)
- * Controlla se un elemento esiste nella coda.
- * <p>
- * @param el l'elemento da cercare.
- * @return true se l'elemento esiste, false altrimenti.
- */
-template<class T>
-bool QueueVector<T>::exists(const typeElem &el) const {
-    if (!isEmpty()) {
-        for (int i = head; i < tail; i++) {
-            if (elements[(head+i)%length] == el) return true;
-        }
-        return false;
-    } else throw std::out_of_range("Empty queue");
-}
-/**
- * Operatore di assegnamento.
- * <p>
- * @param q la coda da copiare.
- * @return la coda che è stata copiata.
+ * @brief Operatore di assegnamento.
+ * @tparam T tipo di dato.
+ * @param q la coda da assegnare.
+ * @return la coda assegnata.
  */
 template<class T>
 QueueVector<T> &QueueVector<T>::operator=(const QueueVector<T> &q) {
     if (this != &q) {
-        delete[] elements;
-        length = q.length;
-        head = q.head;
-        tail = q.tail;
-        elements = new typeElem[length];
-        for (int i = head; i < tail; i++) {
-            elements[(head+i)%length] = q.elements[(head+i)%length];
+        this->~QueueVector();
+        maxLength = q.maxLength;
+        headIndex = q.head;
+        tailIndex = q.length;
+        elements = new typeElem[maxLength];
+        for (int i = headIndex; i < q.length; i++) {
+            elements[(headIndex+i)%maxLength] = q.elements[(headIndex+i)%maxLength];
         }
     }
     return *this;
 }
 /**
- * Operatore di uguaglianza.
- * <p>
+ * @brief Operatore di uguaglianza.
+ * @tparam T tipo di dato.
  * @param q la coda da confrontare.
  * @return true se le code sono uguali, false altrimenti.
  */
 template<class T>
 bool QueueVector<T>::operator==(const QueueVector<T> &q) const {
-    if (tail != q.tail) return false;
-    for (int i=0; i<tail; i++) {
+    if (tailIndex != q.tailIndex) return false;
+    for (int i=headIndex; i<tailIndex; i++) {
         if (elements[i] != q.elements[i]) return false;
     }
     return true;
 }
 /**
- * Operatore di stream.
- * <p>
- * @param os lo stream di output.
+ * @brief Operatore di disuguaglianza.
+ * @tparam T tipo di dato.
+ * @param q la coda da confrontare.
+ * @return true se le code sono diverse, false altrimenti.
+ */
+template <class T>
+bool QueueVector<T>::operator!=(const QueueVector<T> &q) const {
+    return !(*this == q);
+}
+/**
+ * @brief Stampa la coda.
+ * La stampa avviene stampando il valore di ogni elemento della coda,
+ * partendo dalla testa e terminando con la coda.
+ * head -> [1,2,3,4,5] <- tail
+ * @tparam T tipo di dato.
+ * @param os stream di output.
  * @param q la coda da stampare.
  * @return lo stream di output.
  */
 template<class T>
 std::ostream& operator<<(std::ostream& os, const QueueVector<T>& q) {
     os << "[";
-    for (int i = q.head; i < q.tail; i++) {
-        os << q.elements[(q.head+i)%q.length];
-        if (i != q.tail-1) os << ",";
+    for (int i = q.headIndex; i < q.tailIndex; i++) {
+        os << q.elements[(q.headIndex+i)%q.maxLength];
+        if (i != q.tailIndex-1) os << ",";
     }
     os << "]";
     return os;
 }
 /**
- * Cambia la dimensione dell'array.
- * <p>
+ * @brief Verifica se un elemento è presente nella coda.
+ * @tparam T tipo di dato.
+ * @param el l'elemento da cercare.
+ * @return true se l'elemento è presente, false altrimenti.
+ */
+template <class T>
+bool QueueVector<T>::exists(const typeElem &el) const {
+    if (isEmpty()) return false;
+    for (int i = headIndex; i < tailIndex; i++) {
+        if (elements[(headIndex+i)%maxLength] == el) return true;
+    }
+}
+/**
+ * @brief Svuota la coda.
+ * @tparam T tipo di dato.
+ */
+template <class T>
+void QueueVector<T>::clear() {
+    delete[] elements;
+    create();
+}
+/**
+ * @brief Cambia la dimensione dell'array.
  * @param arr l'array da ridimensionare.
  * @param oldDim la vecchia dimensione.
  * @param newDim la nuova dimensione.
@@ -231,11 +253,11 @@ void QueueVector<T>::changeDimension(T*& arr, int oldDim, int newDim) {
     T* tmp = new T[newDim];
     int number = (oldDim < newDim) ? oldDim : newDim;
     for (int i = 0; i < number; i++) {
-        tmp[i] = arr[(head + i) % length];
+        tmp[i] = arr[(headIndex + i) % maxLength];
     }
     delete[] arr;
     arr = tmp;
-    head = 0;
+    headIndex = 0;
 }
 
 #endif //QUEUE_QUEUEVECTOR_H
