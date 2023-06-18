@@ -6,41 +6,41 @@ void runTestsPtr() {
     StackPtr<int> stack;
 
     // Test isEmpty() - Stack is initially empty
-    if (stack.isEmpty()) {
+    if (stack.pilaVuota()) {
         std::cout << "Test Passed: isEmpty() - Stack is initially empty\n";
     } else {
         std::cout << "Test Failed: isEmpty() - Stack is not empty\n";
     }
 
     // Test push() and top()
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
+    stack.inpila(1);
+    stack.inpila(2);
+    stack.inpila(3);
 
     // Test getLength()
-    if (stack.getLength() == 3) {
+    if (stack.lunghezza() == 3) {
         std::cout << "Test Passed: getLength() - Stack length is correct\n";
     } else {
         std::cout << "Test Failed: getLength() - Stack length is incorrect\n";
     }
 
     // Test top()
-    if (stack.top() == 3) {
+    if (stack.leggiPila() == 3) {
         std::cout << "Test Passed: top() - Top of stack is correct\n";
     } else {
         std::cout << "Test Failed: top() - Top of stack is incorrect\n";
     }
 
     // Test exist()
-    if (stack.exist(2)) {
+    if (stack.ricercaElemento(2)) {
         std::cout << "Test Passed: exist() - Element 2 exists in stack\n";
     } else {
         std::cout << "Test Failed: exist() - Element 2 does not exist in stack\n";
     }
 
     // Test pop()
-    stack.pop();
-    if (stack.getLength() == 2 && stack.top() == 2) {
+    stack.fuoriPila();
+    if (stack.lunghezza() == 2 && stack.leggiPila() == 2) {
         std::cout << "Test Passed: pop() - Element popped correctly\n";
     } else {
         std::cout << "Test Failed: pop() - Element not popped correctly\n";
@@ -68,41 +68,41 @@ void runTestsVector() {
     StackVector<int> stack;
 
     // Test isEmpty() - Stack is initially empty
-    if (stack.isEmpty()) {
+    if (stack.pilaVuota()) {
         std::cout << "Test Passed: isEmpty() - Stack is initially empty\n";
     } else {
         std::cout << "Test Failed: isEmpty() - Stack is not empty\n";
     }
 
     // Test push() and top()
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
+    stack.inpila(1);
+    stack.inpila(2);
+    stack.inpila(3);
 
     // Test getLength()
-    if (stack.getLength() == 3) {
+    if (stack.lunghezza() == 3) {
         std::cout << "Test Passed: getLength() - Stack length is correct\n";
     } else {
         std::cout << "Test Failed: getLength() - Stack length is incorrect\n";
     }
 
     // Test top()
-    if (stack.top() == 3) {
+    if (stack.leggiPila() == 3) {
         std::cout << "Test Passed: top() - Top of stack is correct\n";
     } else {
         std::cout << "Test Failed: top() - Top of stack is incorrect\n";
     }
 
     // Test exist()
-    if (stack.exist(2)) {
+    if (stack.ricercaElemento(2)) {
         std::cout << "Test Passed: exist() - Element 2 exists in stack\n";
     } else {
         std::cout << "Test Failed: exist() - Element 2 does not exist in stack\n";
     }
 
     // Test pop()
-    stack.pop();
-    if (stack.getLength() == 2 && stack.top() == 2) {
+    stack.fuoriPila();
+    if (stack.lunghezza() == 2 && stack.leggiPila() == 2) {
         std::cout << "Test Passed: pop() - Element popped correctly\n";
     } else {
         std::cout << "Test Failed: pop() - Element not popped correctly\n";

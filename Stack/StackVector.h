@@ -9,6 +9,7 @@ using namespace std;
 /**
  * @brief Classe che rappresenta una pila implementata tramite vettore.
  * <p><br>
+ * testa -> [1,2,3,4,5,...] <- coda
  * Una pila è una sequenza di elementi di un certo tipo in cui è possibile
  * aggiungere e togliere elementi solo da un capo, detto cima della pila.
  * <p><br>
@@ -27,11 +28,11 @@ public:
     StackVector(const StackVector<T>&);
     ~StackVector();
 
-    void create();          // creaPila()
-    bool isEmpty() const;   // pilaVuota()
-    typeElem top() const;   // leggiPila()
-    void pop();             // fuoriPila()
-    void push(typeElem);    // inPila()
+    void creaPila();                // crea una pila vuota
+    bool pilaVuota() const;         // restituisce true se la pila è vuota, false altrimenti
+    typeElem leggiPila() const;     // restituisce l'elemento in cima alla pila
+    void fuoriPila();               // toglie l'elemento in cima alla pila
+    void inpila(typeElem);          // inserisce un elemento in cima alla pila
 
     StackVector<T>& operator=(const StackVector<T>&);
     bool operator==(const StackVector<T>&) const;
@@ -40,14 +41,14 @@ public:
     template <class U>
     friend ostream& operator<<(ostream&, const StackVector<U>&);
 
-    int getLength() { return head;}
-    bool exist(typeElem);
+    int lunghezza() { return head;}
+    bool ricercaElemento(typeElem);
 
 private:
     typeElem* array;
     int lengthArray;
     int head;
-    void changeDimension(typeElem*& , int, int);
+    void cambiaDimensione(typeElem*& , int, int);
 };
 
 /**
@@ -57,8 +58,7 @@ private:
 template <class T>
 StackVector<T>::StackVector() {
     lengthArray = 10;
-    array = new typeElem[10];
-    create();
+    creaPila();
 }
 /**
  * @brief Costruttore che inizializza la pila con una lunghezza passata come parametro.
@@ -68,8 +68,7 @@ StackVector<T>::StackVector() {
 template <class T>
 StackVector<T>::StackVector(int n) {
     lengthArray = n;
-    array = new typeElem[lengthArray];
-    create();
+    creaPila();
 }
 /**
  * @brief Costruttore di copia.
@@ -98,7 +97,8 @@ StackVector<T>::~StackVector() {
  * @tparam T
  */
 template <class T>
-void StackVector<T>::create() {
+void StackVector<T>::creaPila() {
+    array = new typeElem[lengthArray];
     head = 0;
 }
 /**
@@ -107,7 +107,7 @@ void StackVector<T>::create() {
  * @return true se la pila è vuota, false altrimenti.
  */
 template <class T>
-bool StackVector<T>::isEmpty() const {
+bool StackVector<T>::pilaVuota() const {
     return head == 0;
 }
 /**
@@ -116,8 +116,8 @@ bool StackVector<T>::isEmpty() const {
  * @return elemento in cima alla pila.
  */
 template <class T>
-typename StackVector<T>::typeElem StackVector<T>::top() const {
-    if (isEmpty()) {
+typename StackVector<T>::typeElem StackVector<T>::leggiPila() const {
+    if (head < 1) {
         throw std::out_of_range("Stack is empty");
     }
     return array[head - 1];
@@ -127,8 +127,8 @@ typename StackVector<T>::typeElem StackVector<T>::top() const {
  * @tparam T tipo di dato.
  */
 template <class T>
-void StackVector<T>::pop() {
-    if (isEmpty()) {
+void StackVector<T>::fuoriPila() {
+    if (head < 1) {
         throw std::out_of_range("Stack is empty");
     }
     head--;
@@ -139,9 +139,9 @@ void StackVector<T>::pop() {
  * @param e elemento da inserire.
  */
 template <class T>
-void StackVector<T>::push(typeElem e) {
+void StackVector<T>::inpila(typeElem e) {
     if (head == lengthArray) {
-        changeDimension(array, lengthArray, 2 * lengthArray);
+        cambiaDimensione(array, lengthArray, 2 * lengthArray);
         lengthArray = 2 * lengthArray;
     }
     array[head] = e;
@@ -222,7 +222,7 @@ ostream& operator<<(ostream& os, const StackVector<T>& s) {
  * @param newDim nuova dimensione.
  */
 template <class T>
-void StackVector<T>::changeDimension(StackVector::typeElem *&el, int oldDim, int newDim) {
+void StackVector<T>::cambiaDimensione(StackVector::typeElem *&el, int oldDim, int newDim) {
     int numero = (oldDim < newDim) ? oldDim : newDim;
     typeElem *tmp = new typeElem[newDim];
     for (int i = 0; i < numero; i++) {
@@ -238,7 +238,7 @@ void StackVector<T>::changeDimension(StackVector::typeElem *&el, int oldDim, int
  * @return true se l'elemento è presente, false altrimenti.
  */
 template <class T>
-bool StackVector<T>::exist(typeElem e) {
+bool StackVector<T>::ricercaElemento(typeElem e) {
     for (int i = 0; i < head; i++) {
         if (array[i] == e) {
             return true;

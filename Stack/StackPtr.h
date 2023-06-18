@@ -10,6 +10,7 @@ using namespace std;
 /**
  * @brief Classe che rappresenta una pila implementata tramite puntatori.
  * <p><br>
+ * testa -> [1,2,3,4,5,...] <- coda
  * Una pila è una sequenza di elementi di un certo tipo in cui è possibile
  * aggiungere e togliere elementi solo da un capo, detto cima della pila.
  * <p><br>
@@ -27,11 +28,11 @@ public:
     StackPtr(const StackPtr<T>&);
     ~StackPtr();
 
-    void create();          // creaPila()
-    bool isEmpty() const;   // pilaVuota()
-    typeElem top() const;   // leggiPila()
-    void pop();             // fuoriPila()
-    void push(typeElem);    // inPila()
+    void creaPila();                // crea una pila vuota
+    bool pilaVuota() const;         // restituisce true se la pila è vuota, false altrimenti
+    typeElem leggiPila() const;     // restituisce l'elemento in cima alla pila
+    void fuoriPila();               // toglie l'elemento in cima alla pila
+    void inpila(typeElem);          // inserisce un elemento in cima alla pila
 
     StackPtr<T>& operator=(const StackPtr<T>&);
     bool operator==(const StackPtr<T>&) const;
@@ -40,8 +41,8 @@ public:
     template <class U>
     friend ostream& operator<<(ostream&, const StackPtr<U>&);
 
-    int getLength() const;
-    bool exist(typeElem) const;
+    int lunghezza() const;
+    bool ricercaElemento(typeElem) const;
 
 private:
     Node<T>* head;
@@ -53,7 +54,7 @@ private:
  */
 template <class T>
 StackPtr<T>::StackPtr() {
-    create();
+    creaPila();
 }
 /**
  * @brief Costruttore di copia.
@@ -62,10 +63,17 @@ StackPtr<T>::StackPtr() {
  */
 template <class T>
 StackPtr<T>::StackPtr(const StackPtr<T>& s) {
-    create();
+    creaPila();
     Node<T>* tmp = s.head;
+    Node<T>* prev = nullptr;
     while (tmp != nullptr) {
-        push(tmp->getValue());
+        Node<T>* newNode = new Node<T>(tmp->getValue());
+        if (prev == nullptr) {
+            head = newNode;
+        } else {
+            prev->setNext(newNode);
+        }
+        prev = newNode;
         tmp = tmp->getNext();
     }
 }
@@ -75,8 +83,8 @@ StackPtr<T>::StackPtr(const StackPtr<T>& s) {
  */
 template <class T>
 StackPtr<T>::~StackPtr() {
-    while (!isEmpty()) {
-        pop();
+    while (!pilaVuota()) {
+        fuoriPila();
     }
 }
 /**
@@ -84,7 +92,7 @@ StackPtr<T>::~StackPtr() {
  * @tparam T tipo di dato.
  */
 template <class T>
-void StackPtr<T>::create() {
+void StackPtr<T>::creaPila() {
     head = nullptr;
 }
 /**
@@ -93,28 +101,28 @@ void StackPtr<T>::create() {
  * @return true se la pila è vuota, false altrimenti.
  */
 template <class T>
-bool StackPtr<T>::isEmpty() const {
+bool StackPtr<T>::pilaVuota() const {
     return head == nullptr;
 }
 /**
- * @brief Restituisce la lunghezza della pila.
+ * @brief Restituisce l'elemento in cima alla pila.
  * @tparam T tipo di dato.
- * @return lunghezza della pila.
+ * @return elemento in cima alla pila.
  */
 template <class T>
-typename StackPtr<T>::typeElem StackPtr<T>::top() const {
-    if (isEmpty()) {
+typename StackPtr<T>::typeElem StackPtr<T>::leggiPila() const {
+    if (pilaVuota()) {
         throw std::out_of_range("StackPtr<T>::top() const: empty stack");
     }
     return head->getValue();
 }
 /**
- * @brief Restituisce l'elemento in cima alla pila.
+ * @brief Elimina l'elemento in cima alla pila.
  * @tparam T tipo di dato.
  */
 template <class T>
-void StackPtr<T>::pop() {
-    if (isEmpty()) {
+void StackPtr<T>::fuoriPila() {
+    if (pilaVuota()) {
         throw std::out_of_range("StackPtr<T>::pop(): empty stack");
     }
     Node<T>* tmp = head;
@@ -127,7 +135,7 @@ void StackPtr<T>::pop() {
  * @param value valore da inserire.
  */
 template <class T>
-void StackPtr<T>::push(typeElem value) {
+void StackPtr<T>::inpila(typeElem value) {
     Node<T>* tmp = new Node<T>(value);
     tmp->setNext(head);
     head = tmp;
@@ -142,8 +150,8 @@ template <class T>
 StackPtr<T>& StackPtr<T>::operator=(const StackPtr<T>& s) {
     if (this != &s) {
         // Pulisci la pila corrente
-        while (!isEmpty()) {
-            pop();
+        while (!pilaVuota()) {
+            fuoriPila();
         }
 
         // Copia gli elementi dalla pila s alla pila corrente
@@ -170,7 +178,7 @@ StackPtr<T>& StackPtr<T>::operator=(const StackPtr<T>& s) {
  */
 template <class T>
 bool StackPtr<T>::operator==(const StackPtr<T>& s) const {
-    if (getLength() != s.getLength()) {
+    if (lunghezza() != s.lunghezza()) {
         return false;
     }
     Node<T>* tmp1 = head;
@@ -227,7 +235,7 @@ ostream& operator<<(ostream& os, const StackPtr<T>& s) {
  * @return lunghezza della pila.
  */
 template <class T>
-int StackPtr<T>::getLength() const {
+int StackPtr<T>::lunghezza() const {
     int length = 0;
     Node<T>* tmp = head;
     while (tmp != nullptr) {
@@ -243,7 +251,7 @@ int StackPtr<T>::getLength() const {
  * @return true se l'elemento è presente, false altrimenti.
  */
 template <class T>
-bool StackPtr<T>::exist(typeElem value) const {
+bool StackPtr<T>::ricercaElemento(typeElem value) const {
     Node<T>* tmp = head;
     while (tmp != nullptr) {
         if (tmp->getValue() == value) {
