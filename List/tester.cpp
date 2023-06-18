@@ -1,5 +1,6 @@
 #include <iostream>
 #include "LinkedList.h"
+#include "VectorList.h"
 
 int main() {
     Linked_list<int> linkedlist;
@@ -61,6 +62,5 @@ int main() {
     cout << "5) Ordinamento: ";
     linkedlist.quicksort();
     cout << linkedlist;
-
     return 0;
 }

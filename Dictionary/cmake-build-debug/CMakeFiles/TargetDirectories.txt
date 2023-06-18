@@ -1,0 +1,3 @@
+C:/Users/giova/Desktop/GitHub/Data-Structures-cpp/Dictionary/cmake-build-debug/CMakeFiles/Dictionary.dir
+C:/Users/giova/Desktop/GitHub/Data-Structures-cpp/Dictionary/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/giova/Desktop/GitHub/Data-Structures-cpp/Dictionary/cmake-build-debug/CMakeFiles/rebuild_cache.dir

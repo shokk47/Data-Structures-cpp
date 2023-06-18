@@ -7,7 +7,8 @@ using namespace std;
 
 /**
  * @brief Classe astratta Linear_List
- *
+ * testa -> [0,1,2,3,4,5,...] <- coda
+ * <br>
  * Questa classe rappresenta un'interfaccia per una lista lineare generica.
  * Definisce le operazioni di base e i metodi comuni che possono essere utilizzati
  * con qualsiasi tipo di implementazione della lista.
@@ -22,142 +23,40 @@ public:
     typedef T tipoelem;     /**< Tipo generico della lista */
     typedef P posizione;    /**< Indice dell'elemento nella lista */
 
-    //OPERATORI del dato astratto
-
-    /**
-     * @brief Crea una nuova lista vuota.
-     */
+    // Operatori della Lista
     virtual void creaLista() =0;
-    /**
-     * @brief Verifica se la lista è vuota.
-     * @return True se la lista è vuota, False altrimenti.
-     */
     virtual bool listaVuota() const=0;
-    /**
-     * @brief Legge l'elemento nella posizione specificata.
-     * @param pos La posizione dell'elemento da leggere.
-     * @return L'elemento nella posizione specificata.
-     */
     virtual tipoelem leggiLista(posizione) const=0;
-    /**
-     * @brief Scrive l'elemento nella posizione specificata.
-     * @param elem L'elemento da scrivere.
-     * @param pos La posizione in cui scrivere l'elemento.
-     */
     virtual void scriviLista(const tipoelem&, posizione) =0;
-    /**
-     * @brief Restituisce la posizione del primo elemento nella lista.
-     * @return La posizione del primo elemento.
-     */
     virtual posizione primoLista() const=0;
-    /**
-     * @brief Verifica se la posizione specificata è la fine della lista.
-     * @param pos La posizione da verificare.
-     * @return True se la posizione è la fine della lista, False altrimenti.
-     */
     virtual bool fineLista(posizione)  const=0;
-    /**
-     * @brief Restituisce la posizione successiva alla posizione specificata.
-     * @param pos La posizione di riferimento.
-     * @return La posizione successiva alla posizione specificata.
-     */
     virtual posizione succLista(posizione) const=0;
-    /**
-     * @brief Restituisce la posizione precedente alla posizione specificata.
-     * @param pos La posizione di riferimento.
-     * @return La posizione precedente alla posizione specificata.
-     */
     virtual posizione precLista(posizione) const=0;
-    /**
-     * @brief Inserisce un nuovo elemento nella lista nella posizione specificata.
-     * @param elem L'elemento da inserire.
-     * @param pos La posizione in cui inserire l'elemento.
-     */
     virtual void insLista(const tipoelem&, posizione&) =0;
-    /**
-     * @brief Cancella l'elemento nella posizione specificata.
-     * @param pos La posizione dell'elemento da cancellare.
-     */
     virtual void cancLista(posizione&)=0;
-    /**
-     * @brief Operatore di output per la classe Linear_List.
-     */
-    template <class T1, class P1>
-    friend ostream& operator<<(ostream& , const LinearList<T1,P1>&);
-    /**
-     * @brief Inserisce un nuovo elemento all'inizio della lista.
-     * @param elem L'elemento da inserire.
-     */
+
+    // Metodi aggiuntivi
     virtual void inserisciTesta(const tipoelem&)=0;
-    /**
-     * @brief Inserisce un nuovo elemento alla fine della lista.
-     * @param elem L'elemento da inserire.
-     */
     virtual void inserisciCoda(const tipoelem&)=0;
-    /**
-     * @brief Rimuove l'elemento all'inizio della lista.
-     */
     virtual void rimuoviTesta()=0;
-    /**
-     * @brief Rimuove l'elemento alla fine della lista.
-     */
     virtual void rimuoviCoda()=0;
-    /**
-     * @brief Restituisce la posizione dell'ultimo elemento nella lista.
-     * @return La posizione dell'ultimo elemento.
-     */
     virtual posizione ultimoLista() const=0;
-    /**
-     * @brief Restituisce la lunghezza della lista.
-     * @return Il numero di elementi nella lista.
-     */
     virtual int lunghezza() const=0;
-    /**
-     * @brief Scambia due elementi nella lista.
-     * @param pos1 La posizione del primo elemento da scambiare.
-     * @param pos2 La posizione del secondo elemento da scambiare.
-     */
     virtual void scambiaElementi(posizione, posizione)=0;
-    /**
-     * @brief Ricerca un elemento nella lista.
-     * @param elem L'elemento da cercare.
-     * @return True se l'elemento è presente nella lista, False altrimenti.
-     */
     bool ricercaElemento(T&)const;
-    /**
-     * @brief Inverte l'ordine degli elementi nella lista.
-     */
     void inverti();
-    /**
-     * @brief Verifica se la lista è palindroma.
-     * @return True se la lista è palindroma, False altrimenti.
-     */
     bool palindroma();
 
-    // Metodi di ordinamento
+    // Overload di << per la stampa della lista
+    template <class T1, class P1>
+    friend ostream& operator<<(ostream& , const LinearList<T1,P1>&);
 
-    /**
-     * @brief Ordina la lista utilizzando l'algoritmo Bubble Sort.
-     */
+    // Metodi di ordinamento
     void bubbleSort();
-    /**
-     * @brief Ordina la lista utilizzando l'algoritmo Quick Sort.
-     */
     void quicksort();
 
 private:
-    /**
-     * @brief Effettua la partizione della lista.
-     * @param inizio La posizione iniziale del sottoarray da partizionare.
-     * @param fine La posizione finale del sottoarray da partizionare.
-     * @return La posizione finale del pivot dopo la partizione.
-     */
     posizione partition(posizione inizio, posizione fine);
-    /**
-     * @brief Esegue l'algoritmo Quick Sort sulla lista.
-     * @param inizio La posizione iniziale del sottoarray da ordinare.
-     * @param fine La posizione finale del sottoarray da ordinare.
-     */
     void runQuickSort(posizione inizio, posizione fine);
 };
 
@@ -180,7 +79,7 @@ ostream& operator<<(ostream& os, const LinearList<T,P> &l){
     os << "[";
     while (!l.fineLista(p)){
         if (p != l.primoLista())
-            os << ", " <<l.leggiLista(p);
+            os << "," <<l.leggiLista(p);
         else
             os << l.leggiLista(p);
         p = l.succLista(p);
