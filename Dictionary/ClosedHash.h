@@ -27,15 +27,15 @@ public:
     ClosedHash(const ClosedHash&);
     ~ClosedHash();
 
-    bool isEmpty() const;
-    void insert(Couple<Key,Element>&);
-    void remove(const Key&);
-    Element get(const Key&) const;
-    bool containsKey(const Key&) const;
-    void update(const Key&, const Element&);
+    bool dizionarioVuoto() const;
+    void inserisci(Couple<Key,Element>&);
+    void cancella(const Key&);
+    Element recupera(const Key&) const;
+    bool appartiene(const Key&) const;
+    void aggiorna(const Key&, const Element&);
 
     void clear();
-    int getSize() const {return bucketsUsed;}
+    int lunghezza() const {return bucketsUsed;}
     VectorList<K> keys() const;
     VectorList<E> values() const;
 
@@ -121,7 +121,7 @@ ClosedHash<K,E>::~ClosedHash() {
  * @return true se il dizionario è vuoto, false altrimenti.
  */
 template<class K, class E>
-bool ClosedHash<K,E>::isEmpty() const {
+bool ClosedHash<K,E>::dizionarioVuoto() const {
     return bucketsUsed == 0;
 }
 /**
@@ -132,7 +132,7 @@ bool ClosedHash<K,E>::isEmpty() const {
  * @param element elemento.
  */
 template<class K, class E>
-void ClosedHash<K,E>::insert(Couple<Key,Element>& couple) {
+void ClosedHash<K,E>::inserisci(Couple<Key,Element>& couple) {
     // Se il numero di bucket occupati è maggiore o uguale al 75% del numero di bucket
     if ((double)bucketsUsed >= (double)maxBuckets * 0.75) {
         changeMaxBuckets(maxBuckets * 2);
@@ -165,9 +165,9 @@ void ClosedHash<K,E>::insert(Couple<Key,Element>& couple) {
  * @param key chiave.
  */
 template<class K, class E>
-void ClosedHash<K,E>::remove(const Key& key) {
-    if (!isEmpty()) {
-        if (containsKey(key)) {
+void ClosedHash<K,E>::cancella(const Key& key) {
+    if (!dizionarioVuoto()) {
+        if (appartiene(key)) {
             int i = hash(key) % maxBuckets;
             int j = i;
             bool removed = false;
@@ -195,9 +195,9 @@ void ClosedHash<K,E>::remove(const Key& key) {
  * @return elemento associato alla chiave key.
  */
 template<class K, class E>
-typename ClosedHash<K,E>::Element ClosedHash<K,E>::get(const ClosedHash::Key& key) const {
-    if (!isEmpty()) {
-        if (containsKey(key)) {
+typename ClosedHash<K,E>::Element ClosedHash<K,E>::recupera(const ClosedHash::Key& key) const {
+    if (!dizionarioVuoto()) {
+        if (appartiene(key)) {
             int i = hash(key) % maxBuckets;
             int j = i;
             do {
@@ -220,7 +220,7 @@ typename ClosedHash<K,E>::Element ClosedHash<K,E>::get(const ClosedHash::Key& ke
  * @return true se il dizionario contiene una coppia con chiave key, false altrimenti.
  */
 template<class K, class E>
-bool ClosedHash<K,E>::containsKey(const Key& key) const {
+bool ClosedHash<K,E>::appartiene(const Key& key) const {
     int i = hash(key) % maxBuckets;
     int j = i;
     do {
@@ -238,9 +238,9 @@ bool ClosedHash<K,E>::containsKey(const Key& key) const {
  * @param element nuovo elemento.
  */
 template<class K, class E>
-void ClosedHash<K,E>::update(const Key& key, const Element& element) {
-    if (!isEmpty()) {
-        if (containsKey(key)) {
+void ClosedHash<K,E>::aggiorna(const Key& key, const Element& element) {
+    if (!dizionarioVuoto()) {
+        if (appartiene(key)) {
             int i = hash(key) % maxBuckets;
             int j = i;
             do {
@@ -330,11 +330,11 @@ ClosedHash<K,E> &ClosedHash<K,E>::operator=(const ClosedHash<K,E> &mp) {
  */
 template <class K, class E>
 bool ClosedHash<K,E>::operator==(const ClosedHash<K,E>& mp) const {
-    if (this->getSize() != mp.getSize())
+    if (this->lunghezza() != mp.lunghezza())
         return false;
     else {
         for (int i = 0; i < maxBuckets; i++) {
-            if (buckets[i] != nullptr && !mp.containsKey(buckets[i]->getKey()))
+            if (buckets[i] != nullptr && !mp.appartiene(buckets[i]->getKey()))
                 return false;
         }
         return true;

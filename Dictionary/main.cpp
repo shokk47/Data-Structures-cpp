@@ -10,13 +10,13 @@ void testClosedHash() {
     ClosedHash<int, string> dictionary;
 
     // Verifica che il dizionario sia inizialmente vuoto
-    if (dictionary.isEmpty()) {
+    if (dictionary.dizionarioVuoto()) {
         cout << "Il dizionario e' inizialmente vuoto." << endl;
     } else {
         cout << "ERRORE: Il dizionario non e' inizialmente vuoto." << endl;
     }
 
-    if (dictionary.getSize() == 0) {
+    if (dictionary.lunghezza() == 0) {
         cout << "Il dizionario ha dimensione 0." << endl;
     } else {
         cout << "ERRORE: Il dizionario ha dimensione diversa da 0." << endl;
@@ -27,9 +27,9 @@ void testClosedHash() {
     Couple<int, string> couple2(2, "Two");
     Couple<int, string> couple3(3, "Three");
 
-    dictionary.insert(couple1);
-    dictionary.insert(couple2);
-    dictionary.insert(couple3);
+    dictionary.inserisci(couple1);
+    dictionary.inserisci(couple2);
+    dictionary.inserisci(couple3);
 
     cout << dictionary << endl;
 
@@ -43,22 +43,22 @@ void testClosedHash() {
     }
 
     // Verifica che il dizionario non sia più vuoto
-    if (!dictionary.isEmpty()) {
+    if (!dictionary.dizionarioVuoto()) {
         cout << "Il dizionario non e' vuoto dopo l'inserimento delle coppie." << endl;
     } else {
         cout << "ERRORE: Il dizionario e' vuoto dopo l'inserimento delle coppie." << endl;
     }
 
-    if (dictionary.getSize() == 3) {
+    if (dictionary.lunghezza() == 3) {
         cout << "Il dizionario ha dimensione 3 dopo l'inserimento delle coppie." << endl;
     } else {
         cout << "ERRORE: Il dizionario ha dimensione diversa da 3 dopo l'inserimento delle coppie." << endl;
     }
 
     // Verifica l'ottenimento di un elemento dal dizionario
-    string value1 = dictionary.get(1);
-    string value2 = dictionary.get(2);
-    string value3 = dictionary.get(3);
+    string value1 = dictionary.recupera(1);
+    string value2 = dictionary.recupera(2);
+    string value3 = dictionary.recupera(3);
 
     if (value1 == "One") {
         cout << "Il valore associato alla chiave 1 e' corretto." << endl;
@@ -79,34 +79,34 @@ void testClosedHash() {
     }
 
     // Verifica che una chiave esista nel dizionario
-    if (dictionary.containsKey(1)) {
+    if (dictionary.appartiene(1)) {
         cout << "Il dizionario contiene la chiave 1." << endl;
     } else {
         cout << "ERRORE: Il dizionario non contiene la chiave 1." << endl;
     }
 
-    if (dictionary.containsKey(2)) {
+    if (dictionary.appartiene(2)) {
         cout << "Il dizionario contiene la chiave 2." << endl;
     } else {
         cout << "ERRORE: Il dizionario non contiene la chiave 2." << endl;
     }
 
-    if (dictionary.containsKey(3)) {
+    if (dictionary.appartiene(3)) {
         cout << "Il dizionario contiene la chiave 3." << endl;
     } else {
         cout << "ERRORE: Il dizionario non contiene la chiave 3." << endl;
     }
 
-    if (!dictionary.containsKey(4)) {
+    if (!dictionary.appartiene(4)) {
         cout << "Il dizionario non contiene la chiave 4." << endl;
     } else {
         cout << "ERRORE: Il dizionario contiene la chiave 4." << endl;
     }
 
     // Verifica l'aggiornamento di un elemento nel dizionario
-    dictionary.update(1, "New One");
+    dictionary.aggiorna(1, "New One");
 
-    string updatedValue1 = dictionary.get(1);
+    string updatedValue1 = dictionary.recupera(1);
 
     if (updatedValue1 == "New One") {
         cout << "Il valore associato alla chiave 1 e' stato correttamente aggiornato." << endl;
@@ -115,9 +115,9 @@ void testClosedHash() {
     }
 
     // Verifica la rimozione di un elemento dal dizionario
-    dictionary.remove(2);
+    dictionary.cancella(2);
 
-    if (!dictionary.containsKey(2)) {
+    if (!dictionary.appartiene(2)) {
         cout << "La chiave 2 e' stata correttamente rimossa dal dizionario." << endl;
     } else {
         cout << "ERRORE: La chiave 2 non e' stata rimossa correttamente dal dizionario." << endl;
@@ -126,13 +126,13 @@ void testClosedHash() {
     // Verifica che il dizionario sia correttamente ripulito
     dictionary.clear();
 
-    if (dictionary.isEmpty()) {
+    if (dictionary.dizionarioVuoto()) {
         cout << "Il dizionario e' stato correttamente ripulito e risulta vuoto." << endl;
     } else {
         cout << "ERRORE: Il dizionario non e' stato correttamente ripulito." << endl;
     }
 
-    if (dictionary.getSize() == 0) {
+    if (dictionary.lunghezza() == 0) {
         cout << "Il dizionario ha dimensione 0 dopo essere stato ripulito." << endl;
     } else {
         cout << "ERRORE: Il dizionario ha dimensione diversa da 0 dopo essere stato ripulito." << endl;

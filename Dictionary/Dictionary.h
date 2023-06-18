@@ -21,15 +21,15 @@ public:
 
     // virtual void create() = 0; Rimpiazzato dal costruttore
 
-    virtual bool isEmpty() const = 0;                       // dizionarioVuoto()
-    virtual void insert(Couple<Key,Element> &) = 0;         // inserisci()
-    virtual void remove(const Key&) = 0;                    // cancella()
-    virtual Element get(const Key&) const = 0;              // recupera()
-    virtual bool containsKey(const Key&) const = 0;         // appartiene()
-    virtual void update(const Key&, const Element&) = 0;    // aggiorna Valore associato
+    virtual bool dizionarioVuoto() const = 0;
+    virtual void inserisci(Couple<Key,Element>&) = 0;
+    virtual void cancella(const Key&) = 0;
+    virtual Element recupera(const Key&) const = 0;
+    virtual bool appartiene(const Key&) const = 0;
+    virtual void aggiorna(const Key&, const Element&) = 0;
 
     virtual void clear() = 0;                               // svuota()
-    virtual int getSize() const = 0;                        // dimensione()
+    virtual int lunghezza() const = 0;                      // dimensione()
     virtual VectorList<Key> keys() const = 0;               // restituisce un vettore contenente tutte le chiavi
     virtual VectorList<Element> values() const = 0;         // restituisce un vettore contenente tutti gli elementi
 };
