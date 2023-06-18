@@ -36,10 +36,10 @@ public:
     ~QueueVector();
 
     // Metodi di servizio:
-    bool isEmpty() const;           // codaVuota()
-    typeElem peek() const;          // leggiCoda();
-    void dequeue();                 // fuoriCoda()
-    void enqueue(const typeElem&);  // inCoda()
+    bool codaVuota() const;         // restituisce true se la coda è vuota, false altrimenti
+    typeElem leggiCoda() const;     // restituisce l'elemento in testa alla coda
+    void fuoriCoda();               // elimina l'elemento in testa alla coda
+    void incoda(const typeElem&);   // inserisce un elemento in coda
 
     // Overload operatori:
     QueueVector<T>& operator=(const QueueVector<T>&);
@@ -50,8 +50,8 @@ public:
     friend std::ostream &operator<<(std::ostream&, const QueueVector<T1>&);
 
     // Metodi aggiuntivi:
-    int getLength() const {return tailIndex;}
-    bool exists(const typeElem&) const;
+    int lunghezza() const { return tailIndex; }
+    bool ricercaElemento(const typeElem&) const;
     void clear();
 
 private:
@@ -111,7 +111,7 @@ QueueVector<T>::~QueueVector() {
  * @tparam T tipo di dato.
  */
 template<class T>
-bool QueueVector<T>::isEmpty() const {
+bool QueueVector<T>::codaVuota() const {
     return tailIndex == 0;
 }
 /**
@@ -119,8 +119,8 @@ bool QueueVector<T>::isEmpty() const {
  * @tparam T tipo di dato.
  */
 template<class T>
-typename QueueVector<T>::typeElem QueueVector<T>::peek() const {
-    if (!isEmpty()) return elements[headIndex];
+typename QueueVector<T>::typeElem QueueVector<T>::leggiCoda() const {
+    if (!codaVuota()) return elements[headIndex];
     else throw std::out_of_range("Empty queue");
 }
 /**
@@ -128,8 +128,8 @@ typename QueueVector<T>::typeElem QueueVector<T>::peek() const {
  * @tparam T tipo di dato.
  */
 template<class T>
-void QueueVector<T>::dequeue() {
-    if (!isEmpty()) {
+void QueueVector<T>::fuoriCoda() {
+    if (!codaVuota()) {
         headIndex = (headIndex+1)%maxLength;
         tailIndex--;
     } else throw std::out_of_range("Empty queue");
@@ -139,7 +139,7 @@ void QueueVector<T>::dequeue() {
  * @tparam T tipo di dato.
  */
 template<class T>
-void QueueVector<T>::enqueue(const typeElem &el) {
+void QueueVector<T>::incoda(const typeElem &el) {
     if (tailIndex == maxLength) {
         changeDimension(elements, maxLength, maxLength*2);
         maxLength *= 2;
@@ -222,8 +222,8 @@ std::ostream& operator<<(std::ostream& os, const QueueVector<T>& q) {
  * @return true se l'elemento è presente, false altrimenti.
  */
 template <class T>
-bool QueueVector<T>::exists(const typeElem &el) const {
-    if (isEmpty()) return false;
+bool QueueVector<T>::ricercaElemento(const typeElem &el) const {
+    if (codaVuota()) return false;
     for (int i = headIndex; i < tailIndex; i++) {
         if (elements[(headIndex+i)%maxLength] == el) return true;
     }

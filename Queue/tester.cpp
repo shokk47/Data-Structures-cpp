@@ -6,41 +6,41 @@ void runTestsPtr() {
     QueuePtr<int> queue;
 
     // Test isEmpty() - Queue is initially empty
-    if (queue.isEmpty()) {
+    if (queue.codaVuota()) {
         std::cout << "Test Passed: isEmpty() - Queue is initially empty\n";
     } else {
         std::cout << "Test Failed: isEmpty() - Queue is not empty\n";
     }
 
     // Test enqueue() and peek()
-    queue.enqueue(1);
-    queue.enqueue(2);
-    queue.enqueue(3);
+    queue.incoda(1);
+    queue.incoda(2);
+    queue.incoda(3);
 
     // Test getLength()
-    if (queue.getLength() == 3) {
+    if (queue.lunghezza() == 3) {
         std::cout << "Test Passed: getLength() - Queue length is correct\n";
     } else {
         std::cout << "Test Failed: getLength() - Queue length is incorrect\n";
     }
 
     // Test peek()
-    if (queue.peek() == 1) {
+    if (queue.leggiCoda() == 1) {
         std::cout << "Test Passed: peek() - Front of queue is correct\n";
     } else {
         std::cout << "Test Failed: peek() - Front of queue is incorrect\n";
     }
 
     // Test exists()
-    if (queue.exists(2)) {
+    if (queue.ricercaElemento(2)) {
         std::cout << "Test Passed: exists() - Element 2 exists in queue\n";
     } else {
         std::cout << "Test Failed: exists() - Element 2 does not exist in queue\n";
     }
 
     // Test dequeue()
-    queue.dequeue();
-    if (queue.getLength() == 2 && queue.peek() == 2) {
+    queue.fuoriCoda();
+    if (queue.lunghezza() == 2 && queue.leggiCoda() == 2) {
         std::cout << "Test Passed: dequeue() - Element dequeued correctly\n";
     } else {
         std::cout << "Test Failed: dequeue() - Element not dequeued correctly\n";
@@ -64,15 +64,15 @@ void runTestsPtr() {
 
     // Test clear()
     queue.clear();
-    if (queue.isEmpty()) {
+    if (queue.codaVuota()) {
         std::cout << "Test Passed: clear() - Queue is empty after clearing\n";
     } else {
         std::cout << "Test Failed: clear() - Queue is not empty after clearing\n";
     }
 
     // Test enqueue() after clear()
-    queue.enqueue(4);
-    if (!queue.isEmpty() && queue.getLength() == 1 && queue.peek() == 4) {
+    queue.incoda(4);
+    if (!queue.codaVuota() && queue.lunghezza() == 1 && queue.leggiCoda() == 4) {
         std::cout << "Test Passed: enqueue() after clear() - Element enqueued correctly\n";
     } else {
         std::cout << "Test Failed: enqueue() after clear() - Element not enqueued correctly\n";
@@ -83,41 +83,41 @@ void runTestsVector() {
     QueueVector<int> queue;
 
     // Test isEmpty() - Queue is initially empty
-    if (queue.isEmpty()) {
+    if (queue.codaVuota()) {
         std::cout << "Test Passed: isEmpty() - Queue is initially empty\n";
     } else {
         std::cout << "Test Failed: isEmpty() - Queue is not empty\n";
     }
 
     // Test enqueue() and peek()
-    queue.enqueue(1);
-    queue.enqueue(2);
-    queue.enqueue(3);
+    queue.incoda(1);
+    queue.incoda(2);
+    queue.incoda(3);
 
     // Test getLength()
-    if (queue.getLength() == 3) {
+    if (queue.lunghezza() == 3) {
         std::cout << "Test Passed: getLength() - Queue length is correct\n";
     } else {
         std::cout << "Test Failed: getLength() - Queue length is incorrect\n";
     }
 
     // Test peek()
-    if (queue.peek() == 1) {
+    if (queue.leggiCoda() == 1) {
         std::cout << "Test Passed: peek() - Front of queue is correct\n";
     } else {
         std::cout << "Test Failed: peek() - Front of queue is incorrect\n";
     }
 
     // Test exists()
-    if (queue.exists(2)) {
+    if (queue.ricercaElemento(2)) {
         std::cout << "Test Passed: exists() - Element 2 exists in queue\n";
     } else {
         std::cout << "Test Failed: exists() - Element 2 does not exist in queue\n";
     }
 
     // Test dequeue()
-    queue.dequeue();
-    if (queue.getLength() == 2 && queue.peek() == 2) {
+    queue.fuoriCoda();
+    if (queue.lunghezza() == 2 && queue.leggiCoda() == 2) {
         std::cout << "Test Passed: dequeue() - Element dequeued correctly\n";
     } else {
         std::cout << "Test Failed: dequeue() - Element not dequeued correctly\n";
@@ -141,15 +141,14 @@ void runTestsVector() {
 
     // Test clear()
     queue.clear();
-    if (queue.isEmpty()) {
+    if (queue.codaVuota()) {
         std::cout << "Test Passed: clear() - Queue is empty after clearing\n";
     } else {
         std::cout << "Test Failed: clear() - Queue is not empty after clearing\n";
     }
-
     // Test enqueue() after clear()
-    queue.enqueue(4);
-    if (!queue.isEmpty() && queue.getLength() == 1 && queue.peek() == 4) {
+    queue.incoda(4);
+    if (!queue.codaVuota() && queue.lunghezza() == 1 && queue.leggiCoda() == 4) {
         std::cout << "Test Passed: enqueue() after clear() - Element enqueued correctly\n";
     } else {
         std::cout << "Test Failed: enqueue() after clear() - Element not enqueued correctly\n";

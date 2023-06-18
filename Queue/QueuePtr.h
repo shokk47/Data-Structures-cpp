@@ -36,11 +36,10 @@ public:
     ~QueuePtr();
 
     // Metodi di servizio:
-    void create();                  // creaCoda()
-    bool isEmpty() const;           // codaVuota()
-    typeElem peek() const;          // leggiCoda();
-    void dequeue();                 // fuoriCoda()
-    void enqueue(const typeElem&);  // inCoda()
+    bool codaVuota() const;         // restituisce true se la coda è vuota, false altrimenti
+    typeElem leggiCoda() const;     // restituisce l'elemento in testa alla coda
+    void fuoriCoda();               // elimina l'elemento in testa alla coda
+    void incoda(const typeElem&);   // inserisce un elemento in coda
 
     // Overload operatori:
     QueuePtr<T>& operator=(const QueuePtr<T>&);
@@ -51,8 +50,8 @@ public:
     friend std::ostream &operator<<(std::ostream&, const QueuePtr<T1>&);
 
     // Metodi aggiuntivi:
-    int getLength() const {return length;};
-    bool exists(const typeElem&) const;
+    int lunghezza() const {return length;};
+    bool ricercaElemento(const typeElem&) const;
     void clear();
 
 private:
@@ -67,7 +66,8 @@ private:
  */
 template <class T>
 QueuePtr<T>::QueuePtr() {
-    create();
+    head = tail = nullptr;
+    length = 0;
 }
 /**
  * @brief Costruttore di copia.
@@ -82,7 +82,7 @@ QueuePtr<T>::QueuePtr(const QueuePtr<T> &q) {
 
     Node<T>* nodeCopy = q.head;
     while (nodeCopy != nullptr) {
-        enqueue(nodeCopy->getValue());
+        incoda(nodeCopy->getValue());
         nodeCopy = nodeCopy->getNext();
     }
 }
@@ -95,20 +95,11 @@ QueuePtr<T>::~QueuePtr() {
     clear();
 }
 /**
- * @brief Crea una coda vuota.
- * @tparam T tipo di dato.
- */
-template <class T>
-void QueuePtr<T>::create() {
-    head = tail = nullptr;
-    length = 0;
-}
-/**
  * @brief Restituisce true se la coda è vuota, false altrimenti.
  * @tparam T tipo di dato.
  */
 template <class T>
-bool QueuePtr<T>::isEmpty() const {
+bool QueuePtr<T>::codaVuota() const {
     return head == nullptr;
 }
 /**
@@ -116,8 +107,8 @@ bool QueuePtr<T>::isEmpty() const {
  * @tparam T tipo di dato.
  */
 template <class T>
-typename QueuePtr<T>::typeElem QueuePtr<T>::peek() const {
-    if (isEmpty())
+typename QueuePtr<T>::typeElem QueuePtr<T>::leggiCoda() const {
+    if (codaVuota())
         throw std::runtime_error("QueuePtr vuota, impossibile leggere.");
     return head->getValue();
 }
@@ -126,8 +117,8 @@ typename QueuePtr<T>::typeElem QueuePtr<T>::peek() const {
  * @tparam T tipo di dato.
  */
 template <class T>
-void QueuePtr<T>::dequeue() {
-    if (isEmpty())
+void QueuePtr<T>::fuoriCoda() {
+    if (codaVuota())
         throw std::runtime_error("QueuePtr vuota, impossibile eliminare.");
     Node<T>* node = head;
     head = head->getNext();
@@ -141,9 +132,9 @@ void QueuePtr<T>::dequeue() {
  * @tparam T tipo di dato.
  */
 template <class T>
-void QueuePtr<T>::enqueue(const typeElem &el) {
+void QueuePtr<T>::incoda(const typeElem &el) {
     Node<T>* newNode = new Node<T>(el);
-    if (isEmpty())
+    if (codaVuota())
         head = newNode;
     else
         tail->setNext(newNode);
@@ -162,7 +153,7 @@ QueuePtr<T>& QueuePtr<T>::operator=(const QueuePtr<T>& q) {
         clear();
         Node<T>* nodeCopy = q.head;
         while (nodeCopy != nullptr) {
-            enqueue(nodeCopy->getValue());
+            incoda(nodeCopy->getValue());
             nodeCopy = nodeCopy->getNext();
         }
     }
@@ -231,7 +222,7 @@ std::ostream &operator<<(std::ostream &os, const QueuePtr<T> &q) {
  * @return true se l'elemento è presente, false altrimenti.
  */
 template <class T>
-bool QueuePtr<T>::exists(const typeElem &el) const {
+bool QueuePtr<T>::ricercaElemento(const typeElem &el) const {
     Node<T>* node = head;
     while (node != nullptr) {
         if (node->getValue() == el)
@@ -246,8 +237,8 @@ bool QueuePtr<T>::exists(const typeElem &el) const {
  */
 template <class T>
 void QueuePtr<T>::clear() {
-    while (!isEmpty())
-        dequeue();
+    while (!codaVuota())
+        fuoriCoda();
 }
 
 #endif //QUEUE_QUEUEPTR_H
