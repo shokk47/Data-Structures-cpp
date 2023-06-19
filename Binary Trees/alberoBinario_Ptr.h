@@ -372,9 +372,15 @@ void AlberoBinario_ptr<T>::stampaRicorsiva(Nodo<T>* root, bool figlioDestro, std
     if (root != nullptr) {
         std::cout << spazio;
         if (figlioDestro) {
+            // se il nodo è figlio destro
             std::cout << "-->d:";
             spazio += "    ";
+        } else if (root->padre == nullptr){
+            // se il nodo è la radice
+            std::cout << "-->h:";
+            spazio += "|   ";
         } else {
+            // se il nodo è figlio sinistro
             std::cout << "-->s:";
             spazio += "|   ";
         }
